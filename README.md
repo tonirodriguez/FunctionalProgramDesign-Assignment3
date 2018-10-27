@@ -54,7 +54,7 @@ Before checking properties, we must first generate some heaps. Your first task i
 ```
 lazy val genHeap: Gen[H] = ???
 ```
-
+
 For doing this, you can take inspiration from the lecture on generators and monads. Here are some basic generators that you can combine together to create larger ones:
 
 - arbitrary[T] is a generator that generates an arbitrary value of type T. As we are interested in IntHeaps it will generate arbitrary integer values, uniformly at random.
@@ -77,7 +77,7 @@ lazy val genMap: Gen[Map[Int,Int]] = oneOf(
   } yield m.updated(k, v)
 )
 ```
-
+
 ## Part 2: Writing Properties
 
 Now that you have a generator, you can write property-based tests. The idea behind property-based testing is to verify that certain properties hold on your implementations. Instead of specifying exactly which inputs our properties should satisfy, we instead generate random inputs, and run each property test on these randomly generated inputs. This way we increase the likelihood that our implementation is correct.
@@ -90,7 +90,7 @@ property("min1") = forAll { a: Int =>
   findMin(h) == a
 }
 ```
-
+
 Another property we might be interested in is that, for any heap, adding the minimal element, and then finding it, should return the element in question:
 
 ```
@@ -99,7 +99,7 @@ property("gen1") = forAll { (h: H) =>
   findMin(insert(m, h)) == m
 }
 ```
-
+
 In src/main/scala/quickcheck/QuickCheck.scala, write some more properties that should be satisfied. Your properties should at least cover the following relevant facts:
 
 - If you insert any two elements into an empty heap, finding the minimum of the resulting heap should get the smallest of the two elements back.
