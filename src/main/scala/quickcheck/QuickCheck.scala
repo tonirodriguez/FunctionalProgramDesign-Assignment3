@@ -23,4 +23,43 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
     findMin(insert(m, h)) == m
   }
 
+  property("min1") = forAll { a: A =>
+    val h = insert(a, empty)
+    findMin(h) == a
+  }
+
+  /**
+    * If you insert any two elements into an empty heap, finding the minimum of the resulting heap should get the
+    * smallest of the two elements back.
+    */
+  property("prop1") = forAll { (a1: A, a2: A) =>
+    val h = insert(a1, insert(a2, empty))
+    findMin(h) == {if (a1 <= a2) a1 else a2}
+  }
+
+  /**
+    * If you insert an element into an empty heap, then delete the minimum, the resulting heap should be empty.
+    */
+  property("prop2") = forAll { a: A =>
+    val h= deleteMin(insert(a, empty))
+    isEmpty(h)
+  }
+
+  /**
+    * Given any heap, you should get a sorted sequence of elements when continually finding and deleting minima.
+    * (Hint: recursion and helper functions are your friends.)
+    */
+
+  /**
+    * Finding a minimum of the melding of any two heaps should return a minimum of one or the other.
+    */
+  property("prop4") = forAll { (h1: H, h2: H) =>
+    val m = meld(h1, h2)
+    (isEmpty(h1), isEmpty(h2)) match {
+      case (true, true) => throws(classOf[NoSuchElementException]) (findMin(h1))
+      case (true, false) => findMin(m) == findMin(h2)
+      case (false, true) => findMin(m) == findMin(h1)
+      case (false, false) => (findMin(m) == findMin(h1)) || (findMin(m) == findMin(h2))
+    }
+  }
 }
