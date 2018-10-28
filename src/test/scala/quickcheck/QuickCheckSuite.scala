@@ -20,8 +20,7 @@ class QuickCheckSuite extends FunSuite with Checkers {
     try {
       check(p)
     } catch {
-      case e: TestFailedException =>
-        ok = true
+      case e: TestFailedException => ok = true
     }
     assert(ok, "A bogus heap should NOT satisfy all properties. Try to find the bug!")
   }
